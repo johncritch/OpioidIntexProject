@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <p>Drug Details</p>
+    <h1>
+        {{ drug.drugname }}<br>
+        {{ drug.isopioid }}
+    </h1>
+    {% for pres in prescriber %}
+        <p>{{ pres.lname }}, {{ pres.fname }}</p>
+    {% endfor %}
+
+{% endblock %}

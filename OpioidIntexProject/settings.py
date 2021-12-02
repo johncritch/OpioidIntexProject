@@ -81,7 +81,7 @@ DATABASES = {
     	'NAME': 'intex31', 
     	'USER': 'admin31',
     	'PASSWORD': 'password31!',
-    	'HOST': 'localhost'
+    	'HOST': 'intext31j.postgres.database.azure.com',
 	}
 }
 

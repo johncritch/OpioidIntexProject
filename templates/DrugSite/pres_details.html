@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <p>Prescriber Details</p>
+    <h1>
+        {{ pres.fname }}, {{ pres.lname }}
+    </h1>
+    <p>
+        NPI: {{ pres.npi }}<br>
+        Gender: {{ pres.gender }}<br>
+        State: {{ pres.state }}<br>
+        Credentials: {{ pres.credentials }}<br>
+        Specialty: {{ pres.specialty }}<br>
+        Do they prescribe Opioids?: {{ pres.isopioidprescriber }}<br>
+        Total Prescriptions: {{ pres.totalprescriptions }}<br>
+    </p>
+{% endblock %}
