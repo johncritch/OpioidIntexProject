@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <div>
+        <h2>Edit Prescriber</h2>
+    </div>
+    <br>
+    <form name="form" method="post" action="{% url 'updatePres' %}">
+        {% csrf_token %}
+        <input type="hidden" id="npi" name="npi" value="{{record.npi}}">
+
+        <labal for='fname'>First Name:</label>
+        <input type="text" name='fname' id="fname" value="{{record.fname}}" autofocus>
+        <br><br>
+
+        <labal for='lname'>Last Name:</label>
+        <input type="text" name='lname' id="lname" value="{{record.lname}}">
+        <br><br>
+
+        <input type="radio" name="gender" id='gender' value='M' checked/> Male<br/>
+        <input type="radio" name="gender" id='gender' value='F' /> Female<br/>
+        <br>
+
+        <labal for='state'>State:</label>
+            <select name="state" id="state">
+                <option value="AL">AL</option>
+                <option value="AK">AK</option>
+                <option value="AZ">AZ</option>
+                <option value="AR">AR</option>
+                <option value="CA">CA</option>
+                <option value="CZ">CZ</option>
+                <option value="CO">CO</option>
+                <option value="CT">CT</option>
+                <option value="DE">DE</option>
+                <option value="DC">DC</option>
+                <option value="FL">FL</option>
+                <option value="GA">GA</option>
+                <option value="GU">GU</option>
+                <option value="HI">HI</option>
+                <option value="ID">ID</option>
+                <option value="IL">IL</option>
+                <option value="IN">IN</option>
+                <option value="IA">IA</option>
+                <option value="KS">KS</option>
+                <option value="KY">KY</option>
+                <option value="LA">LA</option>
+                <option value="ME">ME</option>
+                <option value="MD">MD</option>
+                <option value="MA">MA</option>
+                <option value="MI">MI</option>
+                <option value="MN">MN</option>
+                <option value="MS">MS</option>
+                <option value="MO">MO</option>
+                <option value="MT">MT</option>
+                <option value="NE">NE</option>
+                <option value="NV">NV</option>
+                <option value="NH">NH</option>
+                <option value="NJ">NJ</option>
+                <option value="NM">NM</option>
+                <option value="NY">NY</option>
+                <option value="NC">NC</option>
+                <option value="ND">ND</option>
+                <option value="OH">OH</option>
+                <option value="OK">OK</option>
+                <option value="OR">OR</option>
+                <option value="PA">PA</option>
+                <option value="PR">PR</option>
+                <option value="RI">RI</option>
+                <option value="SC">SC</option>
+                <option value="SD">SD</option>
+                <option value="TN">TN</option>
+                <option value="TX">TX</option>
+                <option value="UT">UT</option>
+                <option value="VT">VT</option>
+                <option value="VI">VI</option>
+                <option value="VA">VA</option>
+                <option value="WA">WA</option>
+                <option value="WV">WV</option>
+                <option value="WI">WI</option>
+                <option value="WY">WY</option>
+            </select>
+        <br><br>
+
+        <labal for='cedentials'>Credentials:</label>
+        <input type="text" name='credentials' id="credentials" value="{{record.credentials}}">
+        <br><br>
+
+        <labal for='specialty'>Specialty:</label>
+        <input type="text" name='specialty' id="specialty" value="{{record.specialty}}">
+        <br><br>
+
+        <labal for='isopioidprescriber'>Opioid Prescriber:</label>
+        <select name="isopioidprescriber" id="isopioidprescriber">
+            <option value="TRUE">True</option>
+            <option value="FALSE">False</option>
+        </select>
+        <br><br>
+
+        <button type='submit'>Update</button>
+    </form>
+{% endblock %}

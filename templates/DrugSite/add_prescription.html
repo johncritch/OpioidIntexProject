@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <div>
+        <h2>Add Prescription</h2>
+    </div>
+    <br>
+    <form name="form" method=POST action="{% url 'updatePrescription' %}">
+        {% csrf_token %}
+        <input type="hidden" id="npi" name="npi" value="{{record.npi}}">
+
+        <label for='drugname'>Drug Name:</label>
+        <input list="ddlcomplete" name='drugname'>
+        <datalist id="ddlcomplete">
+            {% for drug in drugs %}
+                <option>{{ drug.drugname|title }}</option>
+            {% endfor %}
+        </datalist><br>
+
+        <label for='qty'>Quantity:</label>
+        <input type="text" name='qty' id="qty">
+        <br><br>
+
+        <button type='submit'>Add</button>
+    </form>
+{% endblock %}

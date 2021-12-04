@@ -1,13 +1,20 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+    <a href="{% url 'search' %}">Back to Search</a>
     <p>Drug Details</p>
     <h1>
-        {{ drug.drugname }}<br>
-        {{ drug.isopioid }}
+        {{ drug.drugname|title }}
     </h1>
-    {% for pres in prescriber %}
-        <p>{{ pres.lname }}, {{ pres.fname }}</p>
+    <h3>
+        Is this drug an opioid? {{ drug.isopioid }}<br><br>
+        Top 10 Prescribers
+    </h3>
+
+    {% for pres in prescribers %}
+        <p>
+            <a href="{% url 'prescriber' id=pres.npi %}">{{ pres.lname }}, {{ pres.fname }}</a>: Prescribed {{ pres.qty }} Times
+        </p>
     {% endfor %}
 
 {% endblock %}

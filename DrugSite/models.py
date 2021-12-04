@@ -2,8 +2,8 @@ from django.db import models
 
 # Create your models here.
 class Drug(models.Model):
-    drugid = models.IntegerField(default=0)
-    drugname = models.CharField(max_length=30, verbose_name="Drug Name", unique=True)
+    drugid = models.IntegerField(auto_created=True, default=0, primary_key=True)
+    drugname = models.CharField(max_length=30, verbose_name="Drug Name")
     isopioid = models.CharField(max_length=5, verbose_name="Is Opioid?")
 
     class Meta:
@@ -13,7 +13,7 @@ class Drug(models.Model):
         return (self.drugname)
 
 class Prescriber(models.Model):
-    npi = models.IntegerField(default=0, unique=True)
+    npi = models.IntegerField(default=0, unique=True, primary_key=True)
     fname = models.CharField(max_length=11, verbose_name="First Name")
     lname = models.CharField(max_length=11, verbose_name="Last Name")
     gender = models.CharField(max_length=2)
@@ -153,7 +153,10 @@ class Prescriber(models.Model):
     levothyroxinesodium = models.IntegerField(default=0)
     lithiumcarbonate = models.IntegerField(default=0)
     lorazepam = models.IntegerField(default=0)
+    lisinopril = models.IntegerField(default=0)
     lisinoprilhydrochlorothiazide= models.IntegerField(default=0)
+    lidocaine= models.IntegerField(default=0)
+    losartanhydrochlorothiazide= models.IntegerField(default=0)
     losartanpotassium = models.IntegerField(default=0)
     lovastatin = models.IntegerField(default=0)
     lovaza = models.IntegerField(default=0)
@@ -174,6 +177,7 @@ class Prescriber(models.Model):
     metronidazole = models.IntegerField(default=0)
     mirtazapine = models.IntegerField(default=0)
     montelukastsodium = models.IntegerField(default=0)
+    morphinesulfate= models.IntegerField(default=0)
     morphinesulfateer= models.IntegerField(default=0)
     mupirocin = models.IntegerField(default=0)
     nabumetone = models.IntegerField(default=0)
@@ -276,8 +280,8 @@ class Prescriber(models.Model):
 
 
 class StateData(models.Model):
+    stateabbrev = models.CharField(max_length=2, primary_key=True)
     state = models.CharField(max_length=14)
-    stateabbrev = models.CharField(max_length=2)
     population = models.IntegerField(default=0)
     deaths = models.IntegerField(default=0)
 
@@ -288,10 +292,13 @@ class StateData(models.Model):
         return (self.state)
 
 class Triple(models.Model):
-    prescriberid = models.ForeignKey(Prescriber, default="", verbose_name="PrescriberID", on_delete=models.DO_NOTHING, to_field='npi')
-    drugname = models.ForeignKey(Drug, default="", verbose_name="Category", on_delete=models.DO_NOTHING, to_field='drugname')
-    qty = models.IntegerField(default=0)
+    prescriberid = models.IntegerField(default=0, verbose_name="PrescriberID")
+    drugname = models.CharField(max_length=30, verbose_name="Drug Name")
+    qty = models.IntegerField(default=0, verbose_name="Quantity")
 
     class Meta:
         db_table = 'pd_triple'
+
+    def __str__(self):
+        return (self.prescriberid, self.drugname, self.qty)
 

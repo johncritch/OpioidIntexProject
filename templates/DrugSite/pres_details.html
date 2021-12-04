@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+    <a href="{% url 'search' %}">Back to Search</a>
     <p>Prescriber Details</p>
     <h1>
-        {{ pres.fname }}, {{ pres.lname }}
+        {{ pres.lname }}, {{ pres.fname }}
     </h1>
     <p>
         NPI: {{ pres.npi }}<br>
@@ -14,4 +15,14 @@
         Do they prescribe Opioids?: {{ pres.isopioidprescriber }}<br>
         Total Prescriptions: {{ pres.totalprescriptions }}<br>
     </p>
+    <h2>Drugs Prescribed by {{ pres.fname }} {{ pres.lname }}: </h2>
+    {% for drug in drugs %}
+        <p>
+            <a href="{% url 'drug' name=drug.drugname %}">{{ drug.drugname|title }}</a>: {{ drug.qty }} Prescriptions<br> 
+            Average Per Prescriber: {{ drug.average }}
+        </p>
+    {% endfor %}
+    <a href="{% url 'editPres' id=pres.npi %}">Edit Prescriber Data</a><br>
+    <a href="{% url 'addPrescription' id=pres.npi %}">Add New Prescription</a><br>
+    <a href="{% url 'deletePres' id=pres.npi %}">Delete Prescriber from Records</a>
 {% endblock %}

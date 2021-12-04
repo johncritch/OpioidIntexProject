@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <a href="{% url 'search' %}">Back to Search</a>
+    {% if searched %}
+        <p>You Search For... {{ searched }} </p>
+        {% for drug in drugs %}
+            <a href="{% url 'drug' name=drug.drugname %}">{{ drug.drugname|title }}</a><br>
+        {% endfor %}
+    {% else %}
+        <p>You Forgot To Search</p>
+    {% endif %}
+
+{% endblock %}
