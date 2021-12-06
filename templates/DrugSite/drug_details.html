@@ -1,20 +1,26 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    <a href="{% url 'search' %}">Back to Search</a>
-    <p>Drug Details</p>
-    <h1>
+<div class = 'b'>
+</div>
+<div class="text-center ">
+    <br><h1 class='display-4'>
         {{ drug.drugname|title }}
     </h1>
-    <h3>
-        Is this drug an opioid? {{ drug.isopioid }}<br><br>
-        Top 10 Prescribers
-    </h3>
-
+    {% if drug.isopioid == 'True' %}
+        <div style="width: 65px; margin: auto; background-color:red; border-radius: 5px;  color: white">
+            Opioid
+        </div><br>
+    {% else %}
+        <div style="width: 115px; margin: auto; background-color:rgb(76,166,114); border-radius: 5px; color: white">
+            Not an Opioid
+        </div><br>
+    {% endif %}
+    <h4>Top 10 Prescribers of {{ drug.drugname|title }}</h4>
     {% for pres in prescribers %}
         <p>
             <a href="{% url 'prescriber' id=pres.npi %}">{{ pres.lname }}, {{ pres.fname }}</a>: Prescribed {{ pres.qty }} Times
         </p>
     {% endfor %}
-
-{% endblock %}
+</div>
+{% endblock %}76	166	114	

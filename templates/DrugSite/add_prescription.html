@@ -1,27 +1,33 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<div class="container">
+<div class = 'b'>
+</div>
+<div class="text-center">
     <div>
-        <h2>Add Prescription</h2>
+        <br><h2 class='text-center display-4'>Add Prescription</h2>
     </div>
-    <br>
-    <form name="form" method=POST action="{% url 'updatePrescription' %}">
-        {% csrf_token %}
-        <input type="hidden" id="npi" name="npi" value="{{record.npi}}">
+    <div class="container">
+        <br>
+        <form name="form" method=POST action="{% url 'updatePrescription' %}">
+            {% csrf_token %}
+            <input type="hidden" id="npi" name="npi" value="{{record.npi}}">
 
-        <label for='drugname'>Drug Name:</label>
-        <input list="ddlcomplete" name='drugname'>
-        <datalist id="ddlcomplete">
-            {% for drug in drugs %}
-                <option>{{ drug.drugname|title }}</option>
-            {% endfor %}
-        </datalist><br>
+            <label for='drugname'>Drug Name:</label>
+            <input class='form-control rounded' style='display:inline; width:171px' list="ddlcomplete" name='drugname'>
+            <datalist id="ddlcomplete">
+                {% for drug in drugs %}
+                    <option>{{ drug.drugname|title }}</option>
+                {% endfor %}
+            </datalist><br><br>
 
-        <label for='qty'>Quantity:</label>
-        <input type="text" name='qty' id="qty">
-        <br><br>
-
-        <button type='submit'>Add</button>
-    </form>
+            <label for='qty'>Number of Prescriptions:</label>
+            <input class='form-control rounded' style='display:inline; width:76px' type="text" name='qty' id="qty">
+            <br><br>
+            <div class='text-center'>
+                <button class="btn btn-primary" type='submit'>Add</button>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %}

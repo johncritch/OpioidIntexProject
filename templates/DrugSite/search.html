@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    <br><h1 class='display-4 text-center'>Explore</h1>
+<div class = 'b'>
+</div>
+<div class='text-center'>
+    <br><h1 class='display-3 text-center'>Explore</h1><br>
     {% comment %} <form method=POST action="{% url 'resultsPres' %}">
         {% csrf_token %}
         <input type='search' placeholder='Search Prescribers or Drugs' name='searched' size='25'>
@@ -11,7 +14,7 @@
     <form method=POST action="{% url 'resultsPres' %}">
         {% csrf_token %}
         <div class="row justify-content-center">
-            <input class= list="ddlcomplete" placeholder='Search Prescribers or Drugs' name='searched' size='32'>
+            <input class='form-control rounded' style='display:inline; width:295px' list="ddlcomplete" placeholder='Search Prescribers or Drugs' name='searched'>
             <datalist id="ddlcomplete">
                 {% for pres in prescriber %}
                     <option>{{ pres.fname }} {{ pres.lname }}</option>
@@ -22,18 +25,22 @@
             </datalist>
         </div>
         <div class="row justify-content-center">
-            <button class="btn btn-outline-primary text-center" type='submit'>Search Prescribers</button>
-            <button class="btn btn-outline-primary text-center" type='submit' formaction="{% url 'resultsDrug' %}" formmethod="POST">Search Drugs</button>
+            <br><button class="btn btn-primary text-center" type='submit'>Search Prescribers</button>&#160
+            <button class="btn btn-primary text-center" type='submit' formaction="{% url 'resultsDrug' %}" formmethod="POST">Search Drugs</button>
         </div>
     </form>
     <div class='text-center'>
-        <br><h3>Top 5 Prescribers</h3>
+        <br><h4 class='display-8'>Top 5 Prescribers</h1>
             {% for pres in prescriber|slice:':5' %}
-                <a href="{% url 'prescriber' id=pres.npi %}">{{ pres.fname }} {{ pres.lname }}</a>: {{ pres.totalprescriptions }}<br>
+                <a href="{% url 'prescriber' id=pres.npi %}">{{ pres.fname }} {{ pres.lname }}</a>: {{ pres.totalprescriptions }} Prescriptions <br>
             {% endfor %}<br>
-        <h3>Top 5 Most Prescribed Drugs</h3>
+        <h4 class='display-8'>Top 5 Most Prescribed Drugs</h1>
             {% for drug in drugs|slice:':5' %}
-                <a href="{% url 'drug' name=drug.drugname %}">{{ drug.drugname|title }}</a>: {{drug.qty}}<br>
+                <a href="{% url 'drug' name=drug.drugname %}">{{ drug.drugname|title }}</a>: {{drug.qty}} Prescriptions<br>
             {% endfor %}
     </div>
+</div>
+<div style='position: absolute; width: 100%; display: flex;justify-content: center; bottom: 10px' >
+    <a href="{% url 'addPres' %}">Add New Prescriber</a>&#160|&#160<a href="#">Add New Drug</a>
+</div>
 {% endblock %}

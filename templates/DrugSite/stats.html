@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class = 'b'>
+</div>
+<div class='text-center'><br>
+    <h1 class='display-4 text-center'>Real-Time Statistics</h1><br>
+
+    <h4>Top 5 Opioid Prescribers</h4>
+    {% for pres in topPresOpioid|slice:':5' %}
+        <a href="{% url 'prescriber' id=pres.npi %}">{{ pres.fullname }}</a>: {{ pres.qty }} Opioid Prescriptions <br>
+    {% endfor %}<br>
+
+    <h4>Top 5 Most Prescribed Opioids</h4> 
+    {% for drug in topOpioid|slice:':5' %}
+        <a href="{% url 'drug' name=drug.drugname %}">{{ drug.drugname|title }}</a>: {{drug.qty}} Prescriptions <br>
+    {% endfor %}<br>
+
+    <h4>Top 5 Prescribers</h4>
+    {% for pres in topPres|slice:':5' %}
+        <a href="{% url 'prescriber' id=pres.npi %}">{{ pres.fname }} {{ pres.lname }}</a>: {{ pres.totalprescriptions }} Prescriptions <br>
+    {% endfor %}<br>
+
+    <h4>Top 5 Most Prescribed Drugs</h4>
+    {% for drug in topDrug|slice:':5' %}
+        <a href="{% url 'drug' name=drug.drugname %}">{{ drug.drugname|title }}</a>: {{drug.qty}} Prescriptions <br>
+    {% endfor %}
+
+</div>
+{% endblock %}

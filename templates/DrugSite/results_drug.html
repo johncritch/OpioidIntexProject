@@ -1,14 +1,31 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    <a href="{% url 'search' %}">Back to Search</a>
+<div class = 'b'>
+</div>
+<div class="text-center">
     {% if searched %}
-        <p>You Search For... {{ searched }} </p>
+        <br><h1 class='display-4'>{{ searched }} </h3>
+        <h5>
+            Results: {{ total }}
+        </h5>
         {% for drug in drugs %}
             <a href="{% url 'drug' name=drug.drugname %}">{{ drug.drugname|title }}</a><br>
         {% endfor %}
     {% else %}
-        <p>You Forgot To Search</p>
+        <br><h3>Uh Oh... You Forgot To Search!</h3>
+        <a href="{% url 'search' %}">Back to Search</a>
     {% endif %}
+</div>
+<div class="a text-center">
+    {% if searched %}
+        <form method=POST action="{% url 'filterResults' searched=searched %}">
+            {% csrf_token %}
+            <h5>Filter By:</h5>
 
+            <button type='submit' class="btn btn-primary text-center" style='margin-bottom: 7px'name='isopioid' value='True'>Opioids Only</button>
+            <button type='submit' class="btn btn-primary text-center" name='isopioid' value='False'>Non Opioids Only</button>
+        </form>
+    {% endif %}
+</div>
 {% endblock %}

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from DrugSite.models import Drug, Prescriber, Triple
 from django.db.models import Q
+from tkinter import messagebox
 
 # Create your views here.
 def indexPageView(request):
@@ -28,65 +29,111 @@ def searchPageView(request):
 
 def resultsPresPageView(request):
     if request.method == 'POST':
-        searched = request.POST['searched']
+        if request.POST['searched']:
+            searched = request.POST['searched']
+            try:
+                a = searched.split()
+                fname,lname = a[0],a[1]
+                pres = Prescriber.objects.get(fname=fname, lname = lname)
 
-        try:
-            a = searched.split()
-            fname,lname = a[0],a[1]
-            pres = Prescriber.objects.get(fname=fname, lname = lname)
+                return presDetailsPageView(request, id = pres.npi)
+            except Exception:
+                pres = Prescriber.objects.filter(Q(lname__contains=searched) | Q(fname__contains=searched)).order_by('lname')
+                context = {
+                    'searched': searched,
+                    'prescribers': pres,
+                    'total': len(pres)
 
-            return presDetailsPageView(request, id = pres.npi)
-        except Exception:
-            pres = Prescriber.objects.filter(Q(lname__contains=searched) | Q(fname__contains=searched)).order_by('lname')
+                }
+                return render(request, 'DrugSite/results_pres.html', context)
+        else:
+            searched = 'All Prescribers'
+            pres = Prescriber.objects.all().order_by('lname')
+
             context = {
                 'searched': searched,
-                'prescribers': pres
-
+                'prescribers': pres,
+                'total': len(pres)
             }
             return render(request, 'DrugSite/results_pres.html', context)
-    
     else:
         return render(request, 'DrugSite/results_pres.html')
 
 def filterResultsPageView(request, searched):
-    pres = Prescriber.objects.filter(Q(lname__contains=searched) | Q(fname__contains=searched)).order_by('lname')
-    if request.POST['gender']:
-        pres = pres.filter(gender = request.POST['gender'])
-    if request.POST['state']:
-        pres = pres.filter(state = request.POST['state'])
-    if request.POST['credentials']:
-        pres = pres.filter(credentials__contains = request.POST['credentials'])
-    if request.POST['specialty']:
-        pres = pres.filter(specialty__contains = request.POST['specialty'])
+    try:
+        isopioid = request.POST['isopioid']
+        if searched == 'All Drugs':
+            drugs = Drug.objects.filter(isopioid =isopioid)
+        else:
+            drugs = Drug.objects.filter(drugname__contains=searched.replace(' ','.').upper(), isopioid=isopioid)
+        
+        for drug in drugs:
+            drug.drugname = drug.drugname.replace('.',' ').lower()
 
-    context = {
-        'searched': searched,
-        'prescribers': pres
-    }
-    return render(request, 'DrugSite/results_pres.html', context)
+        context = {
+            'searched': searched,
+            'drugs': drugs,
+            'total': len(drugs)
+        }
+        return render(request, 'DrugSite/results_drug.html', context)
+    except Exception:
+        if searched == 'All Prescribers':
+            pres = Prescriber.objects.all().order_by('lname')
+        else:
+            pres = Prescriber.objects.filter(Q(lname__contains=searched) | Q(fname__contains=searched)).order_by('lname')
+
+        if request.POST['gender']:
+            pres = pres.filter(gender = request.POST['gender'])
+        if request.POST['state']:
+            pres = pres.filter(state = request.POST['state'])
+        if request.POST['credentials']:
+            pres = pres.filter(credentials__contains = request.POST['credentials'])
+        if request.POST['specialty']:
+            pres = pres.filter(specialty__contains = request.POST['specialty'])
+
+        context = {
+            'searched': searched,
+            'prescribers': pres,
+            'total': len(pres)
+        }
+        return render(request, 'DrugSite/results_pres.html', context)
 
 def resultsDrugPageView(request):
     if request.method == 'POST':
-        searched = request.POST['searched']
+        if request.POST['searched']:
+            searched = request.POST['searched']
 
-        try:
-            drug = Drug.objects.get(drugname=searched.replace(' ','.').upper())
+            try:
+                drug = Drug.objects.get(drugname=searched.replace(' ','.').upper())
 
-            return drugDetailsPageView(request, name=drug.drugname)
+                return drugDetailsPageView(request, name=drug.drugname)
 
-        except Exception:
-            drugs = Drug.objects.filter(drugname__contains=searched.replace(' ','.').upper()).order_by('drugname')
+            except Exception:
+                drugs = Drug.objects.filter(drugname__contains=searched.replace(' ','.').upper()).order_by('drugname')
+
+                for drug in drugs:
+                    drug.drugname = drug.drugname.replace('.',' ').lower()
+
+                context = {
+                    'searched': searched,
+                    'drugs': drugs,
+                    'total': len(drugs)
+
+                }
+                return render(request, 'DrugSite/results_drug.html', context)
+        else:
+            searched = 'All Drugs'
+            drugs = Drug.objects.all().order_by('drugname')
 
             for drug in drugs:
                 drug.drugname = drug.drugname.replace('.',' ').lower()
 
             context = {
                 'searched': searched,
-                'drugs': drugs
-
+                'drugs': drugs,
+                'total': len(drugs)
             }
             return render(request, 'DrugSite/results_drug.html', context)
-    
     else:
         return render(request, 'DrugSite/results_drug.html')
 
@@ -173,12 +220,11 @@ def updatePrescriberPageView(request):
 
     return presDetailsPageView(request, pres.npi)
 
-def deletePrescriberPageView(request, id):
+def deletePrescriberPageView(request, id):  
     data = Prescriber.objects.get(npi = id)
-
     data.delete()
 
-    return indexPageView(request)
+    return searchPageView(request)
 
 def addPrescriptionPageView(request, id):
     record = Prescriber.objects.get(npi = id)
@@ -214,5 +260,45 @@ def updatePrescriptionPageView(request):
         record.save()
 
     return presDetailsPageView(request, record.prescriberid)
+
+def statsPageView(request):
+    topPresOpioid = Prescriber.objects.raw('''SELECT npi, concat(fname, ' ', lname) as fullname, t1.qty
+                                        From pd_prescriber p
+                                        Inner Join (Select t.prescriberid, sum(qty) as qty
+	                                        From pd_triple t
+	                                        Inner Join pd_drugs d on d.drugname = t.drugname
+	                                        Where d.isopioid = 'True'
+	                                        Group by t.prescriberid) t1 on t1.prescriberid = p.npi
+                                        Order by t1.qty desc''')
+
+    topDrug = Drug.objects.raw('''SELECT drugid, d.drugname, sum(qty) as qty
+                                From pd_drugs d
+                                Inner join pd_triple t on t.drugname = d.drugname
+                                Group by drugid, d.drugname
+                                Order by qty desc''')
+    for drug in topDrug:
+        drug.drugname = drug.drugname.replace('.',' ').lower()
+
+    topOpioid = Drug.objects.raw('''SELECT drugid, t1.drugname, t1.qty
+                                    From pd_drugs d
+                                    Inner Join (Select t.drugname, sum(qty) as qty
+	                                    From pd_triple t
+	                                    Inner Join pd_drugs d on d.drugname = t.drugname
+	                                    Where isopioid = 'True'
+	                                    Group by t.drugname) t1 on t1.drugname = d.drugname
+                                    Order by t1.qty desc''')
+    for drug in topOpioid:
+        drug.drugname = drug.drugname.replace('.',' ').lower()
+        print(drug.drugname)
+
+    topPres = Prescriber.objects.all().order_by('-totalprescriptions')
+
+    context = {
+        "topDrug": topDrug,
+        "topPresOpioid": topPresOpioid,
+        "topOpioid": topOpioid,
+        "topPres": topPres
+    }
+    return render(request, 'Drugsite/stats.html', context)
 
 
