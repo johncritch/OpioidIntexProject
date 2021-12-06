@@ -1,28 +1,38 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    <a href="{% url 'search' %}">Back to Search</a>
-    <p>Prescriber Details</p>
-    <h1>
-        {{ pres.lname }}, {{ pres.fname }}
-    </h1>
-    <p>
-        NPI: {{ pres.npi }}<br>
-        Gender: {{ pres.gender }}<br>
-        State: {{ pres.state }}<br>
-        Credentials: {{ pres.credentials }}<br>
-        Specialty: {{ pres.specialty }}<br>
-        Do they prescribe Opioids?: {{ pres.isopioidprescriber }}<br>
-        Total Prescriptions: {{ pres.totalprescriptions }}<br>
-    </p>
-    <h2>Drugs Prescribed by {{ pres.fname }} {{ pres.lname }}: </h2>
-    {% for drug in drugs %}
+<div class = 'b'>
+</div>
+    <div class="text-center">
+        <br><h1 class='display-4'>
+            {{ pres.lname }}, {{ pres.fname }}
+        </h1>
+        {% if pres.isopioidprescriber == 'TRUE' %}
+            <div style="width: 145px; margin: auto; background-color:red; border-radius: 5px;  color: white">
+                Opioid Prescriber
+            </div>
+        {% else %}
+            <div style="width: 195px; margin: auto; background-color:rgb(76,166,114); border-radius: 5px; color: white">
+                Not an Opioid Prescriber
+            </div>
+        {% endif %}<br>
         <p>
-            <a href="{% url 'drug' name=drug.drugname %}">{{ drug.drugname|title }}</a>: {{ drug.qty }} Prescriptions<br> 
-            Average Per Prescriber: {{ drug.average }}
+            NPI: {{ pres.npi }}<br>
+            Gender: {{ pres.gender }}<br>
+            State: {{ pres.state }}<br>
+            Credentials: {{ pres.credentials }}<br>
+            Specialty: {{ pres.specialty }}<br>
+            Total Prescriptions Given: {{ pres.totalprescriptions }}<br>
         </p>
-    {% endfor %}
-    <a href="{% url 'editPres' id=pres.npi %}">Edit Prescriber Data</a><br>
-    <a href="{% url 'addPrescription' id=pres.npi %}">Add New Prescription</a><br>
-    <a href="{% url 'deletePres' id=pres.npi %}">Delete Prescriber from Records</a>
+        <h4>Drugs Prescribed by {{ pres.fname }} {{ pres.lname }}: </h4>
+        {% for drug in drugs %}
+            <p>
+                <a href="{% url 'drug' name=drug.drugname %}">{{ drug.drugname|title }}</a>: Prescribed {{ drug.qty }} Times<br> 
+                Average Per Prescriber: {{ drug.average }} Prescriptions
+            </p>
+        {% endfor %}
+        <a href="{% url 'editPres' id=pres.npi %}">Edit Prescriber Data</a><br>
+        <a href="{% url 'addPrescription' id=pres.npi %}">Add New Prescription</a><br>
+        <a href="{% url 'deletePres' id=pres.npi %}" onclick="return confirm('Are you sure you would like to delete {{ pres.fname }} {{pres.lname }} from all records?')">Delete Prescriber from Records</a>
+        </div>
 {% endblock %}

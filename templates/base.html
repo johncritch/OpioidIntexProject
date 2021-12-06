@@ -7,26 +7,8 @@
         <title>Base</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <style>
-          body {
-            height: 100%;
-          }
           html {
             height: 100%
-          }
-          div.a {
-            position:fixed;
-            top:80px;
-            left:62px;
-            width:730px;
-            height:200px;
-          }
-          div.b {
-            position: fixed;
-            left: 50%;
-            width:730px;
-            height 120%
-            transform: translate(-50%, 0);
-            z-index: -1;
           }
           .flex-container {
             display: flex;
@@ -69,11 +51,34 @@
             display: table;
             clear: both;
           }
-
+            div.a {
+              position: fixed;
+              top: 80px;
+              left: 62px;
+              width: 200px;
+              height: 200px;
+            }
+            div.b {
+              position: fixed;
+              left: 50%;
+              width:730px; 
+              height:120%; 
+              background-color: rgba(255, 255, 255, 0.5); 
+              transform: translate(-50%, 0);
+              z-index:-1;
+            }
+            body {
+              background-image: url('{% static 'img/pillss.png' %}');
+              background-repeat: no-repeat;
+              background-size: cover;
+              height: 100%;
+              background-attachment: fixed;
+            }
         </style>
     </head>
+    <body>
         <!-- Navigation -->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-primary">
             <a class="navbar-brand" href="{% url 'index' %}">Opioid Solutions</a>
           
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -83,6 +88,12 @@
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'about' %}">About</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'stats' %}">Real-Time Stats</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'state' %}">States</a>
                 </li>
               </ul>
             </div>
