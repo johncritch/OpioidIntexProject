@@ -303,7 +303,7 @@ def statsPageView(request):
         "topPres": topPres,
         "states": states,
     }
-    return render(request, 'Drugsite/stats.html', context)
+    return render(request, 'DrugSite/stats.html', context)
 
 def statePageView(request, ab):
     states = StateData.objects.raw(f'''SELECT stateabbrev, state, population, deaths, dpp, rank
