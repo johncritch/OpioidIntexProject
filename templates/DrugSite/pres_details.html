@@ -19,7 +19,7 @@
         <p>
             NPI: {{ pres.npi }}<br>
             Gender: {{ pres.gender }}<br>
-            State: {{ pres.state }}<br>
+            State: <a href="{% url 'state' ab=pres.state %}">{{pres.state}}</a><br>
             Credentials: {{ pres.credentials }}<br>
             Specialty: {{ pres.specialty }}<br>
             Total Prescriptions Given: {{ pres.totalprescriptions }}<br>

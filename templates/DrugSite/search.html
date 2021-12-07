@@ -5,12 +5,6 @@
 </div>
 <div class='text-center'>
     <br><h1 class='display-3 text-center'>Explore</h1><br>
-    {% comment %} <form method=POST action="{% url 'resultsPres' %}">
-        {% csrf_token %}
-        <input type='search' placeholder='Search Prescribers or Drugs' name='searched' size='25'>
-        <button type='submit'>Search Prescribers</button>
-        <button type='submit' formaction="{% url 'resultsDrug' %}" formmethod="POST">Search Drugs</button>
-    </form> {% endcomment %}
     <form method=POST action="{% url 'resultsPres' %}">
         {% csrf_token %}
         <div class="row justify-content-center">

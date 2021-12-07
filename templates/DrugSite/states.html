@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class = 'b'>
+</div>
+<div class='text-center'><br>
+    <h1 class='display-4 text-center'>States</h1><br>
+    {% for state in states %}
+        <a href="{% url 'state' ab=state.stateabbrev %}">{{ state.state }}<br>
+    {% endfor %}
+</div>
+{% endblock %}

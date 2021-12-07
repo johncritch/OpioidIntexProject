@@ -299,6 +299,6 @@ class Triple(models.Model):
     class Meta:
         db_table = 'pd_triple'
 
-    def __str__(self):
-        return (self.prescriberid, self.drugname, self.qty)
+    # def __str__(self):
+    #     return (self.prescriberid, self.drugname, self.qty)
 

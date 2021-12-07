@@ -44,7 +44,11 @@
             width: 50%;
             padding: 10px;
           }
-          
+          .column3 {
+            float: right;
+            width: 33%;
+            padding: 10px;
+          }
           /* Clear floats after the columns */
           .row:after {
             content: "";
@@ -62,8 +66,8 @@
               position: fixed;
               left: 50%;
               width:730px; 
-              height:120%; 
-              background-color: rgba(255, 255, 255, 0.5); 
+              height:140%; 
+              background-color: rgba(255, 255, 255, 0.6); 
               transform: translate(-50%, 0);
               z-index:-1;
             }
@@ -79,7 +83,7 @@
     <body>
         <!-- Navigation -->
         <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-primary">
-            <a class="navbar-brand" href="{% url 'index' %}">Opioid Solutions</a>
+            <a class="navbar-brand" href="https://attorneygeneral.utah.gov/initiatives/utah-opioid-task-force/" target="_blank">Utah Opioid Task Force</a>
           
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav mr-auto">
@@ -93,7 +97,7 @@
                   <a class="nav-link" href="{% url 'stats' %}">Real-Time Stats</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="{% url 'state' %}">States</a>
+                  <a class="nav-link" href="{% url 'states' %}">States</a>
                 </li>
               </ul>
             </div>
@@ -115,6 +119,7 @@
 
         {% block content %}
         {% endblock %}
+        <br><br><br>
     </body>
 </html>
     

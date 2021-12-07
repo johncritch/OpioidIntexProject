@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class = 'b'>
+</div>
+<div class="text-center ">
+    <br><h1 class='display-4'>
+        {{ state.state|title }}
+    </h1>
+    <div class='btn-primary'style="width: 185px; margin: auto; background-color:; border-radius: 5px;  color: white">
+        Opioid Crisis Rank: #{{state.rank}}
+    </div><br>
+    <p>State Abbreviation: {{state.stateabbrev }}</p>
+    <p>State Population: {{state.population }}</p>
+    <p>Total Opioid Deaths: {{state.deaths }}</p>
+    <p>Opioid Deaths Per 100,000: {{state.dpp }}</p><br>
+
+    <h4>Top Prescribers in {{ state.state|title }}</h4><br>
+    {% for pres in prescribers|slice:':10' %}
+        <p>
+            <a href="{% url 'prescriber' id=pres.npi %}">{{ pres.fname }} {{ pres.lname }}</a>: Total Prescriptions: {{ pres.totalprescriptions }}
+        </p>
+    {% endfor %}
+</div>
+{% endblock %}

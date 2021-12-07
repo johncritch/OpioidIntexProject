@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from DrugSite.models import Drug, Prescriber, Triple
-from django.db.models import Q
+from DrugSite.models import Drug, Prescriber, StateData, Triple
+from django.db.models import Q, F
 from tkinter import messagebox
 
 # Create your views here.
@@ -293,12 +293,42 @@ def statsPageView(request):
 
     topPres = Prescriber.objects.all().order_by('-totalprescriptions')
 
+    states = StateData.objects.raw('''SELECT stateabbrev, state, population, deaths, round(deaths/(population/100000)::numeric,1) as dpp
+                                    From pd_statedata
+                                    Order by DPP Desc''')
+
     context = {
         "topDrug": topDrug,
         "topPresOpioid": topPresOpioid,
         "topOpioid": topOpioid,
-        "topPres": topPres
+        "topPres": topPres,
+        "states": states,
     }
     return render(request, 'Drugsite/stats.html', context)
 
+def statePageView(request, ab):
+    states = StateData.objects.raw(f'''SELECT stateabbrev, state, population, deaths, dpp, rank
+                                        From (SELECT stateabbrev, state, population, deaths, DPP, RANK () OVER ( 
+		                                    ORDER BY DPP Desc
+	                                        ) rank
+                                                From (Select stateabbrev, state, population, deaths, round(deaths/(population/100000)::numeric,1) as DPP
+	                                        From pd_statedata) t1) t2
+                                        Where stateabbrev = '{ab}'
+                                    ''')
+    pres = Prescriber.objects.filter(state=ab).order_by('-totalprescriptions')
+
+    for state in states:
+        context = {
+            "state": state,
+            "prescribers": pres
+        }
+    return render(request, 'DrugSite/state.html', context)
+
+def statesPageView(request):
+    states = StateData.objects.all().order_by('state')
+
+    context = {
+        "states": states
+    }
+    return render(request, 'DrugSite/states.html', context)
 
