@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from DrugSite.models import Drug, Prescriber, StateData, Triple
 from django.db.models import Q, F
-from tkinter import messagebox
 
 # Create your views here.
 def indexPageView(request):
