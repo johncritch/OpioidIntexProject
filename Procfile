@@ -1,1 +1,1 @@
-web: gunicorn opioidintexproject.wsgi
+web: gunicorn OpioidIntexProject.wsgi
